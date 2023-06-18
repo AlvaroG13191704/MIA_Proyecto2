@@ -22,3 +22,7 @@ async def create_upload_file(file: UploadFile = File(...)):
     # return the url of the file
     return {"status": "success", "message": "File uploaded", "url": f"https://202109567.s3.amazonaws.com/{file.filename}"}
   
+# test
+@router.get("/test/")
+async def test():
+  return {"status": "success", "message": "Test success"}
