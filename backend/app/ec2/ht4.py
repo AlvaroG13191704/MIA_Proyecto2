@@ -11,7 +11,7 @@ def uploadImageToS3Bucket(image, object_name):
   s3 = setCredentials()
   # Upload the file
   try:
-    response = s3.upload_fileobj(image, "202109567", object_name)
+    response = s3.upload_fileobj(image, "202109567", "files/" + object_name)
     return response
   except ClientError as e:
     logging.error(e)

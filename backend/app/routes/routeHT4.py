@@ -7,7 +7,7 @@ from ..ec2.ht4 import uploadImageToS3Bucket
 # router
 router = APIRouter(
   prefix="/ht4",
-  tags=["ht4"],
+  tags=["test"],
   responses={404: {"description": "Not found"}},
 )
 
