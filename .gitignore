@@ -1,3 +1,5 @@
 /backend/venv
+/frontend/venv
 # py cachce
 /backend/__pycache__
+/frontend/__pycache__
