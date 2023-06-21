@@ -9,7 +9,8 @@ from ..scanner.backupC import scan_command_line_backup
 from ..scanner.recoveryC import scan_command_line_recovery
 from ..scanner.delete_allC import scan_command_line_delete_all
 from ..scanner.openC import scan_command_line_open
-
+# classes
+from ...manageFiles.classes.create import Create
 # recieve an array of commands and execute them
 
 # 1. extract values from the command string
@@ -27,6 +28,13 @@ def execute_commands(commands):
         print(path)
         print(body)
         print(type)
+        # create instance of create class
+        create_object = Create(name, body, path, type)
+        # evaluate if the type is local or bucket
+        if type == "server":
+          return create_object.local()
+        elif type == "bucket":
+         return  create_object.bucket()
       else:
         return {"status": "error", "message": "Comando invalido en create"}
 

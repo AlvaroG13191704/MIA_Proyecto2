@@ -2,7 +2,7 @@
 import logging
 from botocore.exceptions import ClientError
 # import project files
-from .setCredentials import setCredentials
+from ..setCredentials import setCredentials
 
 
 # def upload image to s3 bucket using an endpoint

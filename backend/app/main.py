@@ -25,7 +25,7 @@ app.add_middleware(
 
 # Routes
 app.include_router(routerCommand.router)
-app.include_router(routeHT4.router)
+# app.include_router(routeHT4.router)
 
 
 # if __name__ == "__main__":
