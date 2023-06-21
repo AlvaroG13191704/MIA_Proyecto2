@@ -3,11 +3,11 @@ from fastapi import File, UploadFile
 from fastapi import APIRouter
 
 # Local import
-from ..ec2.ht4 import uploadImageToS3Bucket
+from ..manageFiles.data.ht4 import uploadImageToS3Bucket
 # router
 router = APIRouter(
   prefix="/ht4",
-  tags=["ht4"],
+  tags=["test"],
   responses={404: {"description": "Not found"}},
 )
 
