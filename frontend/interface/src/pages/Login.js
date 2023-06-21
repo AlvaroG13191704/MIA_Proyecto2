@@ -1,9 +1,10 @@
 // Login.js
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../css/Login.css';
+import styles from '../css/Login.module.css';
 
 const Login = () => {
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -15,10 +16,11 @@ const Login = () => {
     // Restablecer los campos
     setUsername('');
     setPassword('');
+    window.location.href="./menu";
   };
 
   return (
-    <div className="container login-container">
+    <div className={styles['login-container']}>
       <h2>Iniciar sesión</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">

@@ -3,3 +3,4 @@
 # py cachce
 /backend/__pycache__
 /frontend/__pycache__
+/frontend/delete
