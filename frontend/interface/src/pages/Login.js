@@ -1,10 +1,8 @@
-// Login.js
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import styles from '../css/Login.module.css';
+import '../css/Login.css';
 
 const Login = () => {
-
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -20,7 +18,7 @@ const Login = () => {
   };
 
   return (
-    <div className={styles['login-container']}>
+    <div className="container login-container">
       <h2>Iniciar sesión</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">

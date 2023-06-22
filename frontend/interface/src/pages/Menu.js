@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import '../css/Menu.module.css';
 
 const Menu = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -9,45 +8,89 @@ const Menu = () => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setSelectedFile(file);
+    readSelectedFile(file);
+  };
+
+  const readSelectedFile = (file) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const fileContent = e.target.result;
+      setConsole1(fileContent);
+    };
+    reader.readAsText(file);
+  };
+
+  const handleConsole1Change = (event) => {
+    setConsole1(event.target.value);
   };
 
   const handleExecute = () => {
-    // Lógica para enviar una solicitud POST a la API con el archivo seleccionado
-    // y obtener los resultados línea por línea
-    // Actualizar las consolas con los resultados obtenidos
-    setConsole1('Resultado de la ejecución línea por línea...');
+    const replacedConsole1 = console1.replace(/"/g, "'");
+    fetch('http://0.0.0.0:8000/command/console-command', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body:('{ \n' + replacedConsole1+ '\n }' )
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Actualizar la consola 2 con los resultados obtenidos
+        setConsole2(data.message);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    console.log('{ \n' + replacedConsole1+ '\n }' )
   };
+  
 
-  const handleReport = () => {
-    // Lógica para obtener el reporte
-    // Actualizar la consola con el reporte obtenido
-    setConsole2('Reporte...');
-  };
 
   const handleLogout = () => {
     window.location.href="./";
   };
 
   return (
-    <div className="menu-container">
-    <input type="file" accept=".mia" onChange={handleFileChange} />
-    <div className="console-container">
-      <div>
-        <h2>Consola 1</h2>
-        <textarea value={console1} readOnly />
-      </div>
-      <div>
-        <h2>Consola 2</h2>
-        <textarea value={console2} readOnly />
+    <div className="container py-4">
+      <div className="container">
+        <div className="row">
+          <div className="col-12">
+            <div className="button-container float-end">
+              <button type="button" className="btn btn-danger" onClick={handleLogout}>Logout</button>
+            </div>
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-4">
+            <div className="">
+              <h5>Subir Archivos</h5>
+              <form className="form">
+                <input type="file" className="carga mt-3" id="file" name="file" onChange={handleFileChange} />
+              </form>
+            </div>
+          </div>
+
+          <div className="col-8">
+            <div>
+              <textarea className="form-control mt-4 taller-textarea" value={console1} onChange={handleConsole1Change}></textarea>
+            </div>
+
+            <div>
+              <textarea className="form-control mt-4 taller-textarea" value={console2} readOnly></textarea>
+            </div>
+
+            <div>
+              <button type="button" className="btn btn-primary mt-4" onClick={handleExecute}>Ejecutar</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div className="button-container">
-      <button onClick={handleExecute}>Ejecutar</button>
-      <button onClick={handleReport}>Reporte</button>
-      <button onClick={handleLogout}>Logout</button>
-    </div>
-  </div>
   );
 };
 
 export default Menu;
+
+
+
