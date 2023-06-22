@@ -18,6 +18,7 @@ async def consoleCommand(command: modelCommand):
   if not command:
     return {"status": "error", "message": "No command"}
   else:
+    # return {"status": "success", "message": "Command recieved"}
     # send function to process command
     commands = extract_commands(command.command)
     response = execute_commands(commands)

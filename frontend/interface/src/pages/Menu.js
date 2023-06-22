@@ -25,23 +25,30 @@ const Menu = () => {
   };
 
   const handleExecute = () => {
-    const replacedConsole1 = console1.replace(/"/g, "'");
+    const replacedConsole1 = console1.replace(/"/g, "");
+ 
     fetch('http://0.0.0.0:8000/command/console-command', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body:('{ \n' + replacedConsole1+ '\n }' )
+      // body:('{ \n' + replacedConsole1+ '\n }' )
+      body: JSON.stringify({
+        command: replacedConsole1
+      })
     })
       .then(response => response.json())
       .then(data => {
         // Actualizar la consola 2 con los resultados obtenidos
         setConsole2(data.message);
+        console.log(data)
       })
       .catch(error => {
         console.error('Error:', error);
       });
-    console.log('{ \n' + replacedConsole1+ '\n }' )
+    console.log(JSON.stringify({
+      command: replacedConsole1
+    }) )
   };
   
 
