@@ -15,7 +15,7 @@ from ...manageFiles.classes.delete import Delete
 from ...manageFiles.classes.copy import Copy
 from ...manageFiles.classes.transfer import Transfer
 from ...manageFiles.classes.rename import Rename
-
+from ...manageFiles.classes.modify import Modify
 # recieve an array of commands and execute them
 
 # 1. extract values from the command string
@@ -104,9 +104,14 @@ def execute_commands(commands):
       modify, path, body, type = scan_command_line_modify(command.get("modify"))
       if modify and path and body and type:
         print("modify")
-        print(path)
-        print(body)
-        print(type)
+        # create instance of modify class
+        modify_object = Modify(path, body, type)
+        # evaluate if the type is local or bucket
+        if type == "server":
+          return modify_object.local()
+        elif type == "bucket":
+          return modify_object.bucket()
+        
       else:
         return {"status": "error", "message": "Comando invalido en modify"}
 
