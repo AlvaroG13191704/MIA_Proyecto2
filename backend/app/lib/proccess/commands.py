@@ -11,6 +11,11 @@ from ..scanner.delete_allC import scan_command_line_delete_all
 from ..scanner.openC import scan_command_line_open
 # classes
 from ...manageFiles.classes.create import Create
+from ...manageFiles.classes.delete import Delete
+from ...manageFiles.classes.copy import Copy
+from ...manageFiles.classes.transfer import Transfer
+from ...manageFiles.classes.rename import Rename
+
 # recieve an array of commands and execute them
 
 # 1. extract values from the command string
@@ -24,10 +29,6 @@ def execute_commands(commands):
       create, name, path, body, type = scan_command_line_create(command.get("create"))
       if create and name and path and body and type:
         print("create")
-        print(name)
-        print(path)
-        print(body)
-        print(type)
         # create instance of create class
         create_object = Create(name, body, path, type)
         # evaluate if the type is local or bucket
@@ -43,9 +44,14 @@ def execute_commands(commands):
       delete, path, name, type = scan_command_line_delete(command.get("delete"))
       if delete and path and type:
         print("delete")
-        print(path)
-        print(name)
-        print(type)
+        # create instance of delete class
+        delete_object = Delete(path, name, type)
+        # evaluate if the type is local or bucket
+        if type == "server":
+          return delete_object.local()
+        elif type == "bucket":
+          return delete_object.bucket()
+        
       else:
         return {"status": "error", "message": "Comando invalido en delete"}
 
@@ -53,21 +59,29 @@ def execute_commands(commands):
       copy, from_, to_, type_to, type_from = scan_command_line_copy(command.get("copy"))
       if copy and from_ and to_ and type_to and type_from:
         print("copy")
-        print(from_)
-        print(to_)
-        print(type_to)
-        print(type_from)
+        # create instance of copy class
+        copy_object = Copy(from_, to_, type_to, type_from)
+        # evaluate if the type is local or bucket
+        if type_from == "server":
+          return copy_object.local()
+        elif type_from == "bucket":
+          return copy_object.bucket()
+        
       else:
         return {"status": "error", "message": "Comando invalido en copy"}
 
     elif command.get("transfer"):
       transfer, from_, to_, type_to, type_from = scan_command_line_transfer(command.get("transfer"))
       if transfer and from_ and to_ and type_to and type_from:
+        # create instance of transfer class
+        transfer_object = Transfer(from_, to_, type_to, type_from)
         print("transfer")
-        print(from_)
-        print(to_)
-        print(type_to)
-        print(type_from)
+        # evaluate if the type is local or bucket
+        if type_from == "server":
+          return transfer_object.local()
+        elif type_from == "bucket":
+          return transfer_object.bucket()
+        
       else:
         return {"status": "error", "message": "Comando invalido en transfer"}
       
@@ -76,9 +90,13 @@ def execute_commands(commands):
       rename, path, name, type = scan_command_line_rename(command.get("rename"))
       if rename and path and name and type:
         print("rename")
-        print(path)
-        print(name)
-        print(type)
+        # create instance of rename class
+        rename_object = Rename(path, name, type)
+        # evaluate if the type is local or bucket
+        if type == "server":
+          return rename_object.local()
+        elif type == "bucket":
+          return rename_object.bucket()
       else:
         return {"status": "error", "message": "Comando invalido en rename"}
 
