@@ -16,6 +16,10 @@ from ...manageFiles.classes.copy import Copy
 from ...manageFiles.classes.transfer import Transfer
 from ...manageFiles.classes.rename import Rename
 from ...manageFiles.classes.modify import Modify
+from ...manageFiles.classes.backup import Backup
+# from ...manageFiles.classes.recovery import Recovery
+from ...manageFiles.classes.delete_all import Delete_all
+from ...manageFiles.classes.open import Open
 # recieve an array of commands and execute them
 
 # 1. extract values from the command string
@@ -85,7 +89,6 @@ def execute_commands(commands):
       else:
         return {"status": "error", "message": "Comando invalido en transfer"}
       
-
     elif command.get("rename"):
       rename, path, name, type = scan_command_line_rename(command.get("rename"))
       if rename and path and name and type:
@@ -119,11 +122,25 @@ def execute_commands(commands):
       backup, type_to, type_from, ip , port, name  = scan_command_line_backup(command.get("backup"))
       if backup and type_to and type_from and name:
         print("backup")
-        print(type_to)
-        print(type_from)
-        print(name)
-        print(ip)
-        print(port)
+        # create instance of backup class
+        backup_object = Backup(type_to, type_from, ip , port, name)
+        # evaluate if the backup is only in our environment
+
+        if ip == None and port == None:
+          # evaluate if the type is local or bucket
+          if type_from == "server":
+            return backup_object.bucket()
+          elif type_from == "bucket":
+            return backup_object.local()
+        # evaluate if the backup is in another environment (port and ip)
+        elif ip != None and port != None:
+          # evaluate if the type is local or bucket
+          if type_from == "server":
+            return backup_object.local_api()
+          elif type_from == "bucket":
+            return backup_object.bucket_api()
+        else:
+          return {"status": "error", "message": "Comando invalido en backup"}
       else:
         return {"status": "error", "message": "Comando invalido en backup"}
 
@@ -143,7 +160,13 @@ def execute_commands(commands):
       delete_all, type = scan_command_line_delete_all(command.get("delete_all"))
       if delete_all and type:
         print("delete_all")
-        print(type)
+        # create instance of delete_all class
+        delete_all_object = Delete_all(type)
+        # evaluate if the type is local or bucket
+        if type == "server":
+          return delete_all_object.local()
+        elif type == "bucket":
+          return delete_all_object.bucket()
       else:
         return {"status": "error", "message": "Comando invalido en delete_all"}
 
@@ -151,9 +174,20 @@ def execute_commands(commands):
       open, type, ip, port, name = scan_command_line_open(command.get("open"))
       if open and type and name:
         print("open")
-        print(type)
-        print(ip)
-        print(port)
-        print(name)
+        # create instance of open class
+        open_object = Open(type, ip, port, name)
+        # evaluate if the backup is only in our environment
+        if ip == None and port == None:
+          # evaluate if the type is local or bucket
+          if type == "server":
+            return open_object.local()
+          elif type == "bucket":
+            return open_object.bucket()
+        # evaluate if the backup is in another environment (port and ip)
+        elif ip != None and port != None:
+          # evaluate if the type is local or bucket
+          return open_object.api_ip()
+        else:
+          return {"status": "error", "message": "Comando invalido en backup"}
       else:
         return {"status": "error", "message": "Comando invalido en open"}

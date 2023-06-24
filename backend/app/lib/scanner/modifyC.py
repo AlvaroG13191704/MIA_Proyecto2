@@ -18,7 +18,10 @@ def scan_command_line_modify(command_line):
   path = None
   try:
     if match_path and match_path.group() is not None:
-      path = match_path.group().split("->")[1].replace("'", '').replace(' -body','')
+      if match_path.group() == "/ ":
+        path = "/ "
+      else:
+        path = match_path.group().split("->")[1].replace("'", '').replace(' -body','')
   except AttributeError:
     path = None
 

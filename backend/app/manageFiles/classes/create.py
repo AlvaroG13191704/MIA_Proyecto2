@@ -47,6 +47,13 @@ class Create():
     bucket_name = "mia-proyecto2"
     object_key = 'Archivos' + self.path + self.name
     try:
+      # evaluate if the file exists
+      list_objects = self.s3.list_objects(Bucket=bucket_name, Prefix=object_key)
+      if 'Contents' in list_objects:
+        return {
+          "status": "error",
+          "message": f"El archivo {self.name} ya existe"
+        }
       self.s3.put_object(Bucket=bucket_name, Key=object_key, Body=self.body)
       return {
         "status": "success",
@@ -55,7 +62,7 @@ class Create():
     except Exception as e:
       return {
         "status": "error",
-        "message": f"Error al crear archivo {self.name}"
+        "message": f"Error al crear archivo {self.name} {object_key} ya existe"
       }
 
 
