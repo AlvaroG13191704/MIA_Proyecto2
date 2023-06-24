@@ -23,14 +23,17 @@ class Backup():
   
 
 
-  def local(self):
+  def local(self, struc_json = None):
     if self.type_to == "bucket":
       return {
         "status": "error",
         "message": "No se puede hacer backup en el mismo bucket"
       }
     # create a json file with the name of the backup and the structure of the files and directories
-    struc_json = self.generate_directory_structure_bucket("mia-proyecto2")
+    if struc_json == None:
+      struc_json = self.generate_directory_structure_bucket("mia-proyecto2")
+      
+    # return struc_json
     # generate the files on the srever
     base_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))) + "/" + self.name
     self.generate_backup_on_server(struc_json, base_path)
@@ -40,7 +43,7 @@ class Backup():
     }
   
 
-  def bucket(self):
+  def bucket(self, struc_json = None):
     if self.type_to == "server":
       return {
         "status": "error",
@@ -48,7 +51,9 @@ class Backup():
       }
     base_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))) + "/Archivos" 
     # create a json file with the name of the backup and the structure of the files and directories
-    struc_json = self.generate_directory_structure_server(base_path)
+    if struc_json == None:
+      struc_json = self.generate_directory_structure_server(base_path)
+
     # generate the files on the bucket
     self.generate_backup_on_bucket(struc_json, "mia-proyecto2", self.name+"/")
     return {
@@ -74,10 +79,17 @@ class Backup():
     headers = {'Content-Type': 'application/json'}
     response = requests.post(f'http://{self.ip}:{self.port}/backup', data=json.dumps(payload), headers=headers)
     if response.status_code == 200:
-       return {
-        "status": "success",
-        "message": f"Backup {self.name} creado exitosamente en el servidor con la ip: {self.ip}."
-       }
+      # if the status is true, return success
+      if response.json()["status"] == True:
+        return {
+          "status": "success",
+          "message": f"Backup {self.name} creado exitosamente en el bucket con la ip: {self.ip}."
+        }
+      else:
+        return {
+          "status": "error",
+          "message": f"Error al crear el backup {self.name} en el bucket con la ip: {self.ip}."
+        }
     else:
       return {
         "status": "error",
@@ -102,10 +114,17 @@ class Backup():
     headers = {'Content-Type': 'application/json'}
     response = requests.post(f'http://{self.ip}:{self.port}/backup', data=json.dumps(payload), headers=headers)
     if response.status_code == 200:
-      return {
-        "status": "success",
-        "message": f"Backup {self.name} creado exitosamente en el bucket con la ip: {self.ip}."
-      }
+      # if the status is true, return success
+      if response.json()["status"] == True:
+        return {
+          "status": "success",
+          "message": f"Backup {self.name} creado exitosamente en el bucket con la ip: {self.ip}."
+        }
+      else:
+        return {
+          "status": "error",
+          "message": f"Error al crear el backup {self.name} en el bucket con la ip: {self.ip}."
+        }
     else:
       return {
         "status": "error",
@@ -159,7 +178,7 @@ class Backup():
     directory_structure = {}
 
     s3 = self.s3
-    response = s3.list_objects_v2(Bucket=bucket, Delimiter='/')
+    response = s3.list_objects_v2(Bucket=bucket, Delimiter='Archivos/')
 
     for obj in response.get('CommonPrefixes', []):
         directory_name = obj['Prefix'].strip('/').split('/')[-1]

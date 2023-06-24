@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 # local imports
 from app.routes import routeHT4
 from app.routes import routerCommand
+from app.routes import routerAccess
 # fastapi
 app = FastAPI ()
 
@@ -26,6 +27,7 @@ app.add_middleware(
 
 # Routes
 app.include_router(routerCommand.router)
+app.include_router(routerAccess.router)
 # app.include_router(routeHT4.router)
 
 

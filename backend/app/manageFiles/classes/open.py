@@ -22,7 +22,7 @@ class Open():
   
 
   def local(self):
-    path = self.name.replace('"', '')
+    path = self.name.replace("'", '')
     path = path.lstrip("/")
 
     # Get the absolute path of the project directory
@@ -73,10 +73,16 @@ class Open():
     headers = {'Content-Type': 'application/json'}
     response = requests.post(f'http://{self.ip}:{self.port}/open', data=json.dumps(payload), headers=headers)
     if response.status_code == 200:
-       return {
-        "status": "success",
-        "message": response.json()["content"]
-       }
+      # if content is null, return error
+      if response.json()["content"] == None or response.json()["content"] == "null":
+        return {
+          "status": "error",
+          "message": f"El archivo {self.name} no existe"
+        }
+      return {
+      "status": "success",
+      "message": response.json()["content"]
+      }
     else:
       return {
         "status": "error",

@@ -17,7 +17,7 @@ from ...manageFiles.classes.transfer import Transfer
 from ...manageFiles.classes.rename import Rename
 from ...manageFiles.classes.modify import Modify
 from ...manageFiles.classes.backup import Backup
-# from ...manageFiles.classes.recovery import Recovery
+from ...manageFiles.classes.recovery import Recovery
 from ...manageFiles.classes.delete_all import Delete_all
 from ...manageFiles.classes.open import Open
 # recieve an array of commands and execute them
@@ -125,7 +125,6 @@ def execute_commands(commands):
         # create instance of backup class
         backup_object = Backup(type_to, type_from, ip , port, name)
         # evaluate if the backup is only in our environment
-
         if ip == None and port == None:
           # evaluate if the type is local or bucket
           if type_from == "server":
@@ -148,11 +147,24 @@ def execute_commands(commands):
       recovery, type_to, type_from, ip , port, name  = scan_command_line_recovery(command.get("recovery"))
       if recovery and type_to and type_from and name:
         print("recovery")
-        print(type_to)
-        print(type_from)
-        print(name)
-        print(ip)
-        print(port)
+        # create instance of backup class
+        recovery_object = Recovery(type_to, type_from, ip , port, name)
+        # evaluate if the backup is only in our environment
+        if ip == None and port == None:
+          # evaluate if the type is local or bucket
+          if type_from == "server":
+            return recovery_object.local()
+          elif type_from == "bucket":
+            return recovery_object.bucket()
+        # evaluate if the backup is in another environment (port and ip)
+        elif ip != None and port != None:
+          # evaluate if the type is local or bucket
+          if type_from == "server":
+            return recovery_object.local_api()
+          elif type_from == "bucket":
+            return recovery_object.bucket_api()
+        else:
+          return {"status": "error", "message": "Comando invalido en backup"}
       else:
         return {"status": "error", "message": "Comando invalido en recovery"}
 
