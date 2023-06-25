@@ -28,7 +28,9 @@ from ...manageFiles.classes.open import Open
 
 
 def execute_commands(commands):
+  message_string = ""
   for command in commands:
+    print(command)
     if command.get("create"):
       create, name, path, body, type = scan_command_line_create(command.get("create"))
       if create and name and path and body and type:
@@ -37,11 +39,16 @@ def execute_commands(commands):
         create_object = Create(name, body, path, type)
         # evaluate if the type is local or bucket
         if type == "server":
-          return create_object.local()
+          # return create_object.local()
+          response = create_object.local()
+          message_string += response["message"] + "\n"
         elif type == "bucket":
-         return  create_object.bucket()
+        #  return  create_object.bucket()
+          response = create_object.bucket()
+          message_string += response["message"] + "\n"
       else:
-        return {"status": "error", "message": "Comando invalido en create"}
+        # return {"status": "error", "message": "Comando invalido en create"}
+        message_string += "Comando invalido en create" + "\n"
 
 
     elif command.get("delete"):
@@ -52,12 +59,18 @@ def execute_commands(commands):
         delete_object = Delete(path, name, type)
         # evaluate if the type is local or bucket
         if type == "server":
-          return delete_object.local()
+          # return delete_object.local()
+          response = delete_object.local()
+          message_string += response["message"] + "\n"
         elif type == "bucket":
-          return delete_object.bucket()
+          # return delete_object.bucket()
+          response = delete_object.bucket()
+          message_string += response["message"] + "\n"
         
       else:
-        return {"status": "error", "message": "Comando invalido en delete"}
+        # return {"status": "error", "message": "Comando invalido en delete"}
+        message_string += "Comando invalido en delete" + "\n"
+
 
     elif command.get("copy"):
       copy, from_, to_, type_to, type_from = scan_command_line_copy(command.get("copy"))
@@ -67,12 +80,17 @@ def execute_commands(commands):
         copy_object = Copy(from_, to_, type_to, type_from)
         # evaluate if the type is local or bucket
         if type_from == "server":
-          return copy_object.local()
+          # return copy_object.local()
+          response = copy_object.local()
+          message_string += response["message"] + "\n"
         elif type_from == "bucket":
-          return copy_object.bucket()
+          # return copy_object.bucket()
+          response = copy_object.bucket()
+          message_string += response["message"] + "\n"
         
       else:
-        return {"status": "error", "message": "Comando invalido en copy"}
+        # return {"status": "error", "message": "Comando invalido en copy"}
+        message_string += "Comando invalido en copy" + "\n"
 
     elif command.get("transfer"):
       transfer, from_, to_, type_to, type_from = scan_command_line_transfer(command.get("transfer"))
@@ -82,12 +100,18 @@ def execute_commands(commands):
         print("transfer")
         # evaluate if the type is local or bucket
         if type_from == "server":
-          return transfer_object.local()
+          # return transfer_object.local()
+          response = transfer_object.local()
+          message_string += response["message"] + "\n"
         elif type_from == "bucket":
-          return transfer_object.bucket()
-        
+          # return transfer_object.bucket()
+          response = transfer_object.bucket()
+          message_string += response["message"] + "\n"
+      
       else:
-        return {"status": "error", "message": "Comando invalido en transfer"}
+        # return {"status": "error", "message": "Comando invalido en transfer"}
+        message_string += "Comando invalido en transfer" + "\n"
+
       
     elif command.get("rename"):
       rename, path, name, type = scan_command_line_rename(command.get("rename"))
@@ -97,11 +121,17 @@ def execute_commands(commands):
         rename_object = Rename(path, name, type)
         # evaluate if the type is local or bucket
         if type == "server":
-          return rename_object.local()
+          # return rename_object.local()
+          response = rename_object.local()
+          message_string += response["message"] + "\n"
         elif type == "bucket":
-          return rename_object.bucket()
+          # return rename_object.bucket()
+          response = rename_object.bucket()
+          message_string += response["message"] + "\n"
       else:
-        return {"status": "error", "message": "Comando invalido en rename"}
+        # return {"status": "error", "message": "Comando invalido en rename"}
+        message_string += "Comando invalido en rename" + "\n"
+      
 
     elif command.get("modify"):
       modify, path, body, type = scan_command_line_modify(command.get("modify"))
@@ -111,12 +141,17 @@ def execute_commands(commands):
         modify_object = Modify(path, body, type)
         # evaluate if the type is local or bucket
         if type == "server":
-          return modify_object.local()
+          # return modify_object.local()
+          response = modify_object.local()
+          message_string += response["message"] + "\n"
         elif type == "bucket":
-          return modify_object.bucket()
+          # return modify_object.bucket()
+          response = modify_object.bucket()
+          message_string += response["message"] + "\n"
         
       else:
-        return {"status": "error", "message": "Comando invalido en modify"}
+        # return {"status": "error", "message": "Comando invalido en modify"}
+        message_string += "Comando invalido en modify" + "\n"
 
     elif command.get("backup"):
       backup, type_to, type_from, ip , port, name  = scan_command_line_backup(command.get("backup"))
@@ -128,20 +163,34 @@ def execute_commands(commands):
         if ip == None and port == None:
           # evaluate if the type is local or bucket
           if type_from == "server":
-            return backup_object.bucket()
+            # return backup_object.bucket()
+            response = backup_object.bucket()
+            message_string += response["message"] + "\n"
+
           elif type_from == "bucket":
-            return backup_object.local()
+            # return backup_object.local()
+            response = backup_object.local()
+            message_string += response["message"] + "\n"
+
         # evaluate if the backup is in another environment (port and ip)
         elif ip != None and port != None:
           # evaluate if the type is local or bucket
           if type_from == "server":
-            return backup_object.local_api()
+            # return backup_object.local_api()
+            response = backup_object.local_api()
+            message_string += response["message"] + "\n"
+
           elif type_from == "bucket":
-            return backup_object.bucket_api()
+            # return backup_object.bucket_api()
+            response = backup_object.bucket_api()
+            message_string += response["message"] + "\n"
+
         else:
-          return {"status": "error", "message": "Comando invalido en backup"}
+          # return {"status": "error", "message": "Comando invalido en backup"}
+          message_string += "Comando invalido en backup" + "\n"
       else:
-        return {"status": "error", "message": "Comando invalido en backup"}
+        # return {"status": "error", "message": "Comando invalido en backup"}
+        message_string += "Comando invalido en backup" + "\n"
 
     elif command.get("recovery"):
       recovery, type_to, type_from, ip , port, name  = scan_command_line_recovery(command.get("recovery"))
@@ -153,20 +202,34 @@ def execute_commands(commands):
         if ip == None and port == None:
           # evaluate if the type is local or bucket
           if type_from == "server":
-            return recovery_object.local()
+            # return recovery_object.local()
+            response = recovery_object.local()
+            message_string += response["message"] + "\n"
+
           elif type_from == "bucket":
-            return recovery_object.bucket()
+            # return recovery_object.bucket()
+            response = recovery_object.bucket()
+            message_string += response["message"] + "\n"
+
         # evaluate if the backup is in another environment (port and ip)
         elif ip != None and port != None:
           # evaluate if the type is local or bucket
           if type_from == "server":
-            return recovery_object.local_api()
+            # return recovery_object.local_api()
+            response = recovery_object.local_api()
+            message_string += response["message"] + "\n"
+
           elif type_from == "bucket":
-            return recovery_object.bucket_api()
+            # return recovery_object.bucket_api()
+            response = recovery_object.bucket_api()
+            message_string += response["message"] + "\n"
+
         else:
-          return {"status": "error", "message": "Comando invalido en backup"}
+          # return {"status": "error", "message": "Comando invalido en backup"}
+          message_string += "Comando invalido en backup" + "\n"
       else:
-        return {"status": "error", "message": "Comando invalido en recovery"}
+        # return {"status": "error", "message": "Comando invalido en recovery"}
+        message_string += "Comando invalido en recovery" + "\n"
 
     elif command.get("delete_all"):
       delete_all, type = scan_command_line_delete_all(command.get("delete_all"))
@@ -176,11 +239,18 @@ def execute_commands(commands):
         delete_all_object = Delete_all(type)
         # evaluate if the type is local or bucket
         if type == "server":
-          return delete_all_object.local()
+          # return delete_all_object.local()
+          response = delete_all_object.local()
+          message_string += response["message"] + "\n"
+
         elif type == "bucket":
-          return delete_all_object.bucket()
+          # return delete_all_object.bucket()
+          response = delete_all_object.bucket()
+          message_string += response["message"] + "\n"
+
       else:
-        return {"status": "error", "message": "Comando invalido en delete_all"}
+        # return {"status": "error", "message": "Comando invalido en delete_all"}
+        message_string += "Comando invalido en delete_all" + "\n"
 
     elif command.get("open"):
       open, type, ip, port, name = scan_command_line_open(command.get("open"))
@@ -192,14 +262,26 @@ def execute_commands(commands):
         if ip == None and port == None:
           # evaluate if the type is local or bucket
           if type == "server":
-            return open_object.local()
+            # return open_object.local()
+            response = open_object.local()
+            message_string += response["message"] + "\n"
+
           elif type == "bucket":
-            return open_object.bucket()
+            # return open_object.bucket()
+            response = open_object.bucket()
+            message_string += response["message"] + "\n"
+
         # evaluate if the backup is in another environment (port and ip)
         elif ip != None and port != None:
           # evaluate if the type is local or bucket
-          return open_object.api_ip()
+          # return open_object.api_ip()
+          response = open_object.api_ip()
+          message_string += response["message"] + "\n"
         else:
-          return {"status": "error", "message": "Comando invalido en backup"}
+          # return {"status": "error", "message": "Comando invalido en backup"}
+          message_string += "Comando invalido en backup" + "\n"
       else:
-        return {"status": "error", "message": "Comando invalido en open"}
+        # return {"status": "error", "message": "Comando invalido en open"}
+        message_string += "Comando invalido en open" + "\n"
+
+  return {"status": "success", "message": message_string}

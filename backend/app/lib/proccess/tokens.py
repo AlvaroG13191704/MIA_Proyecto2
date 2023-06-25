@@ -12,6 +12,6 @@ def extract_commands(command_string):
       command = matches[i].rstrip()  # Remove leading whitespace
       if i + 1 < len(matches):
           command += matches[i + 1]  # Include the whitespace after the command
-      tokens.append({matches[i].lower(): command})
+      tokens.append({matches[i].lower(): command.replace("\n", " ")})
 
   return tokens
