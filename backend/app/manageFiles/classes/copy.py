@@ -34,7 +34,7 @@ class Copy():
           if os.path.isdir(destiny_path) and os.path.basename(origin_path) == os.path.basename(destiny_path):
             return {
               "status": "error",
-              "Error":f"Ya existe una carpeta con el nombre '{os.path.basename(origin_path)}' en la ubicación de destino."
+              "Message":f"Ya existe una carpeta con el nombre '{os.path.basename(origin_path)}' en la ubicación de destino."
             }
           else:
             self.copyDirectoryLocal(origin_path, destiny_path)
@@ -48,7 +48,7 @@ class Copy():
           if os.path.exists(os.path.join(destiny_path,file_name)):
             return {
               "status": "error",
-              "Error":f"Ya existe un archivo con el nombre '{file_name}' en la ubicación de destino."
+              "message":f"Ya existe un archivo con el nombre '{file_name}' en la ubicación de destino."
             }
           else:
             self.copyFileLocal(origin_path, os.path.join(destiny_path,file_name))
@@ -81,13 +81,13 @@ class Copy():
               if file in [obj["Key"].split("/")[-1] for obj in object_list["Contents"]]:
                 return {
                   "status": "error",
-                  "Error":f"Ya existe un archivo con el nombre '{file}' en la ubicación de destino."
+                  "message":f"Ya existe un archivo con el nombre '{file}' en la ubicación de destino."
                 }
               # if the directory not exist in the bucket, upload it
               if file in [obj["Key"].split("/")[-2] for obj in object_list["Contents"]]:
                 return {
                   "status": "error",
-                  "Error":f"Ya existe una carpeta con el nombre '{file}' en la ubicación de destino."
+                  "message":f"Ya existe una carpeta con el nombre '{file}' en la ubicación de destino."
                 }
               # if file is a directory iterate the files inside
               if os.path.isdir(os.path.join(origin_path,file)):
@@ -114,7 +114,7 @@ class Copy():
             if os.path.basename(origin_path) in [obj["Key"].split("/")[-1] for obj in object_list["Contents"]]:
               return {
                 "status": "error",
-                "Error":f"Ya existe un archivo con el nombre '{os.path.basename(origin_path)}' en la ubicación de destino."
+                "message":f"Ya existe un archivo con el nombre '{os.path.basename(origin_path)}' en la ubicación de destino."
               }
             else:
               self.copyFileBucket(os.path.basename(origin_path), destiny_path_bucket, open(origin_path, 'rb'), name_bucket)
@@ -164,7 +164,7 @@ class Copy():
             if len([obj["Key"].split("/")[-1] for obj in object_list_destiny["Contents"]]) > 1:
               return {
                 "status": "error",
-                "Error":f"Ya existe un archivo en la ubicación de destino {destiny_path_bucket}."
+                "message":f"Ya existe un archivo en la ubicación de destino {destiny_path_bucket}."
               }
             else:
               # copy the files from the origin path to the destiny path
@@ -180,7 +180,7 @@ class Copy():
             if len([obj["Key"].split("/")[-1] for obj in object_list_destiny["Contents"]]) > 1:
               return {
                 "status": "error",
-                "Error":f"Ya existe un archivo en la ubicación de destino {destiny_path_bucket}."
+                "message":f"Ya existe un archivo en la ubicación de destino {destiny_path_bucket}."
               }
             else:
               # copy the files from the origin path to the destiny path
@@ -235,7 +235,7 @@ class Copy():
             if os.path.exists(os.path.join(destiny_path, os.path.basename(origin_path))):
               return {
                 "status": "error",
-                "Error":f"Ya existe un archivo en la ubicación de destino {os.path.basename(destiny_path)}."
+                "message":f"Ya existe un archivo en la ubicación de destino {os.path.basename(destiny_path)}."
               }
             else:
               # copy the files from the origin path to the destiny path
