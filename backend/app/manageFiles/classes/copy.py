@@ -219,7 +219,7 @@ class Copy():
             if len([obj["Key"].split("/")[-1] for obj in object_list_origin["Contents"]]) > 1 and len([obj for obj in os.listdir(destiny_path) if obj in [obj["Key"].split("/")[-1] for obj in object_list_origin["Contents"]]]) > 0:
               return {
                 "status": "error",
-                "Error":f"Ya existe un archivo en la ubicación de destino {os.path.basename(destiny_path)}."
+                "message":f"Ya existe un archivo en la ubicación de destino {os.path.basename(destiny_path)}."
               }
             # copy the files from the origin path to the destiny path
             for file in object_list_origin["Contents"]:
