@@ -6,7 +6,9 @@ def scan_command_line_open(command_line):
   pattern_type = r'-type->(?:"([^"]+)"|(\S+))(\s|$)'
   patern_ip = r'-ip->(?:"([^"]+)"|(\S+))(\s|$)'
   patern_port = r'-port->(?:"([^"]+)"|(\S+))(\s|$)'
-  pattern_name = r"-name->(?:(?:'([^']+)'|\"([^\"]+)\")|(\S+))(\s|$)"
+  pattern_name = r"-name\-\>(.*)"
+
+  # pattern_name = r"-name->(?:(?:'([^']+)'|\"([^\"]+)\")|(\S+))(\s|$)"
 
   # Match the components using regular expressions
   match_open = re.search(pattern_open, command_line,re.I)
