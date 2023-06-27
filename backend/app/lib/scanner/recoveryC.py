@@ -7,7 +7,7 @@ def scan_command_line_recovery(command_line):
   pattern_type_from = r'-type_from->(?:"([^"]+)"|(\S+))(\s|$)'
   patern_ip = r'-ip->(?:"([^"]+)"|(\S+))(\s|$)'
   patern_port = r'-port->(?:"([^"]+)"|(\S+))(\s|$)'
-  pattern_name = r"-name->(?:(?:'([^']+)'|\"([^\"]+)\")|(\S+))(\s|$)"
+  pattern_name = r"-name\-\>(.*)"
 
   # Match the components using regular expressions
   match_recovery = re.search(pattern_recovery, command_line,re.I)
