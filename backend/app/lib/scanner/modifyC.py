@@ -21,7 +21,8 @@ def scan_command_line_modify(command_line):
       if match_path.group() == "/ ":
         path = "/ "
       else:
-        path = match_path.group().split("->")[1].replace("'", '').replace(' -body','')
+        path = match_path.group().split("->")[1].replace("'", '').replace(' -body','').replace(' -type','').replace(' -Type','')
+
   except AttributeError:
     path = None
 
