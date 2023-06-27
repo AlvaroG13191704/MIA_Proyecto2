@@ -264,27 +264,27 @@ def execute_commands(commands):
         if ip == None and port == None:
           # evaluate if the type is local or bucket
           if type == "server":
-            # return open_object.local()
-            response = open_object.local()
-            message_string += response["message"] + "\n"
+            return open_object.local()
+            # response = open_object.local()
+            # message_string += response["message"] + "\n"
 
           elif type == "bucket":
-            # return open_object.bucket()
-            response = open_object.bucket()
-            message_string += response["message"] + "\n"
+            return open_object.bucket()
+            # response = open_object.bucket()
+            # message_string += response["message"] + "\n"
 
         # evaluate if the backup is in another environment (port and ip)
         elif ip != None and port != None:
           print("entra")
           # evaluate if the type is local or bucket
-          # return open_object.api_ip()
-          response = open_object.api_ip()
-          message_string += response["message"] + "\n"
+          return open_object.api_ip()
+          # response = open_object.api_ip()
+          # message_string += response["message"] + "\n"
+
         else:
-          # return {"status": "error", "message": "Comando invalido en backup"}
-          message_string += "Comando invalido en backup" + "\n"
+          return {"status": "error", "message": "Comando invalido en backup"}
       else:
-        # return {"status": "error", "message": "Comando invalido en open"}
-        message_string += "Comando invalido en open" + "\n"
+        return {"status": "error", "message": "Comando invalido en open"}
+        # message_string += "Comando invalido en open" + "\n"
 
   return {"status": "success", "message": message_string}

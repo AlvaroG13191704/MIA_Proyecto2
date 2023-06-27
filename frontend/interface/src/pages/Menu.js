@@ -27,8 +27,9 @@ const Menu = () => {
   
   const handleExecute = () => {
     const replacedConsole1 = console1.replace(/"/g, "'");
-   
-    fetch('http://18.221.14.38:8000/command/console-command', {
+    // http://18.221.14.38:8000/command/console-command
+    // http://0.0.0.0:8000/command/console-command
+    fetch('http://0.0.0.0:8000/command/console-command', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
