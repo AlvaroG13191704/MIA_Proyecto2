@@ -9,16 +9,10 @@ from app.routes import routerAccess
 # fastapi
 app = FastAPI ()
 
-origins=[
-  "http://localhost:5173",
-  "http://localhost:5173/",
-  "http://localhost:3000",
-  # add the domain of your frontend app here
-]
 
 app.add_middleware(
   CORSMiddleware,
-  allow_origins=origins,
+  allow_origins=["*"],
   allow_credentials=True,
   allow_methods=["*"],
   allow_headers=["*"],
