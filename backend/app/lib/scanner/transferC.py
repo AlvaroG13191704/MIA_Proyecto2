@@ -32,4 +32,4 @@ def scan_command_line_transfer(command_line):
   type_to = match_type_to.group(1) or match_type_to.group(2) if match_type_to else None
   type_from = match_type_from.group(1) or match_type_from.group(2) if match_type_from else None
   # Return the extracted values
-  return transfer.lower().rstrip(" "), from_path.rstrip(" "), to_path.rstrip(" "), type_to, type_from
+  return transfer.lower().rstrip(" "), from_path.replace("-type-from","").rstrip(" "), to_path.rstrip(" "), type_to, type_from

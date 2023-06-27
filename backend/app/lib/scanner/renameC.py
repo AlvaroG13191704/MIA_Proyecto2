@@ -21,7 +21,7 @@ def scan_command_line_rename(command_line):
       if match_path.group() == "/ ":
         path = "/ "
       else:
-        path = match_path.group().split("->")[1].replace("'", '').replace(' -name','')
+        path = match_path.group().split("->")[1].replace("'", '').replace(' -name','').replace('-type','').replace(' -Type','')
   except AttributeError:
     path = None
   # this None could be ambigous, becuase it could come or not

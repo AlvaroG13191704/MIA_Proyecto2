@@ -14,9 +14,10 @@ class Delete():
 
   def local(self):
     path = self.path.replace('"', '').lstrip('/').rstrip('/')
-    name = None
+    name = self.name
     # evaluate if the name is not false
-    if self.name:
+    print(self.name)
+    if not self.name:
       name = ""
     # Get the absolute path of the project directory
     root_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
@@ -24,12 +25,14 @@ class Delete():
 
     if os.path.exists(file_):
       if os.path.isfile(file_):
+        print("archivo?",file_)
         os.remove(file_)
         return {
           "status": "success",
           "message": f"Archivo {name} eliminado exitosamente"
         }
       elif os.path.isdir(file_):
+        print("CARPETA?", file_)
         shutil.rmtree(file_)
         return {
           "status": "success",
@@ -62,8 +65,17 @@ class Delete():
         }
     else:
       object_key = 'Archivos' + self.path + name
+      # evaluate if the name is the key exist
+      objects = self.s3.list_objects(Bucket=bucket_name, Prefix=object_key)
+      if not "Contents" in objects:
+        return {
+          "status": "error",
+          "message": f"El archivo {name} no existe"
+        }
+
       try:
         self.s3.delete_object(Bucket=bucket_name, Key=object_key)
+
         return {
           "status": "success",
           "message": f"Archivo {name} eliminado exitosamente"

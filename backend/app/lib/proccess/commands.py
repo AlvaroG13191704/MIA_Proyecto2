@@ -121,10 +121,12 @@ def execute_commands(commands):
         rename_object = Rename(path, name, type)
         # evaluate if the type is local or bucket
         if type == "server":
+          print("entra server")
           # return rename_object.local()
           response = rename_object.local()
           message_string += response["message"] + "\n"
         elif type == "bucket":
+          print("entra server")
           # return rename_object.bucket()
           response = rename_object.bucket()
           message_string += response["message"] + "\n"
@@ -273,6 +275,7 @@ def execute_commands(commands):
 
         # evaluate if the backup is in another environment (port and ip)
         elif ip != None and port != None:
+          print("entra")
           # evaluate if the type is local or bucket
           # return open_object.api_ip()
           response = open_object.api_ip()

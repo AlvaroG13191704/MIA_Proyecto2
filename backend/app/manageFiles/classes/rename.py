@@ -37,7 +37,7 @@ class Rename():
           }
       elif os.path.isdir(file_):
         parent_dir = os.path.dirname(file_)
-        new_path = os.path.join(parent_dir, self.name)
+        new_path = os.path.join(parent_dir, self.name.replace("'",""))
 
         if not os.path.exists(new_path):
           shutil.move(file_, new_path)
@@ -57,14 +57,62 @@ class Rename():
       }
 
   def bucket(self):
+    # return {
+    #   "status": "error",
+    #   "message": f"El archivo {self.name} no existe  --- 'Archivos{self.path}' --- '{self.type}' --- '{self.name}' ",
+    # }
     name_bucket = "mia-proyecto2"
     origin_path_bucket = "Archivos" + self.path
-    destini_path_bucket = "Archivos" + self.path.replace(self.path.split("/")[-1], self.name)
-    print(origin_path_bucket, destini_path_bucket)
-    # evaluate if the file exists
+    new_path = self.path.split("/")
+    destini_path_bucket = "Archivos" + "/".join(new_path[:-1]) + "/" + self.name.replace("'","")
+    # print(origin_path_bucket, destini_path_bucket)
+    # evaluate if its a file or a folder
+
+    if origin_path_bucket.endswith("/"):
+      # copy the file
+      new_directory = "Archivos" + "/".join(new_path[:-2]) + "/" + self.name.replace("'","") + "/"
+      print(new_directory , origin_path_bucket)
+
+      # list the objects in the directory
+      object_list_origin = self.s3.list_objects(Bucket=name_bucket, Prefix=origin_path_bucket)
+      # Iterate over the objects and copy them to the new directory
+      if "Contents" in object_list_origin:
+        for obj in object_list_origin["Contents"]:
+          # print(obj["Key"])
+          # print(obj["Key"].split("/")[-1])
+          # print(new_directory + obj["Key"].split("/")[-1])
+          self.s3.copy_object(
+            Bucket=name_bucket,
+            CopySource={
+              "Bucket": name_bucket,
+              "Key": obj["Key"]
+            },
+            Key=new_directory + obj["Key"].split("/")[-1]
+          )
+          # delete the file
+          self.s3.delete_object(
+            Bucket=name_bucket,
+            Key=obj["Key"]
+          )
+        # delete the directory
+        self.s3.delete_object(
+          Bucket=name_bucket,
+          Key=origin_path_bucket
+        )
+        return {
+        "status": "success",
+        "message": f"Carpeta {self.name} renombrado exitosamente  "
+        }
+      else:
+        return {
+          "status": "error",
+          "message": f"No se puedo renombrar la carpeta {self.name} porque no existe la carpeta {self.path}"
+        }
+
     object_list_origin = self.s3.list_objects(Bucket=name_bucket, Prefix=origin_path_bucket)
+    # print(object_list_origin)
     if "Contents" in object_list_origin:
-      # evaluate if the file exists
+      # evaluate if the path is a directory
       object_list_destini = self.s3.list_objects(Bucket=name_bucket, Prefix=destini_path_bucket)
       if "Contents" in object_list_destini:
         return {
@@ -72,21 +120,28 @@ class Rename():
           "message": f"El archivo {self.name} ya existe"
         }
       else:
-        # copy the file
-        self.s3.copy_object(
-          Bucket=name_bucket,
-          CopySource={
-            "Bucket": name_bucket,
-            "Key": origin_path_bucket
-          },
-          Key=destini_path_bucket
-        )
-        # delete the file
-        self.s3.delete_object(
-          Bucket=name_bucket,
-          Key=origin_path_bucket
-        )
-        return {
+        # evaluate if the origin path is a file or a folder
+        if origin_path_bucket.endswith(".txt"):
+          self.s3.copy_object(
+            Bucket=name_bucket,
+            CopySource={
+              "Bucket": name_bucket,
+              "Key": origin_path_bucket
+            },
+            Key=destini_path_bucket
+          )
+          # delete the file
+          self.s3.delete_object(
+            Bucket=name_bucket,
+            Key=origin_path_bucket
+          )
+          return {
           "status": "success",
-          "message": f"Archivo {self.name} renombrado exitosamente"
-        }
+          "message": f"Archivo {self.name} renombrado exitosamente "
+          }
+    else:
+      return {
+        "status": "error",
+        "message": f"No se puedo renombrar el archivo {self.path}"
+      }
+      

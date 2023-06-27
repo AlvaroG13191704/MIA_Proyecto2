@@ -24,15 +24,15 @@ const Menu = () => {
     setConsole1(event.target.value);
   };
 
+  
   const handleExecute = () => {
-    const replacedConsole1 = console1.replace(/"/g, "");
- 
-    fetch('http://0.0.0.0:8000/command/console-command', {
+    const replacedConsole1 = console1.replace(/"/g, "'");
+   
+    fetch('http://18.221.14.38:8000/command/console-command', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      // body:('{ \n' + replacedConsole1+ '\n }' )
       body: JSON.stringify({
         command: replacedConsole1
       })
@@ -41,15 +41,16 @@ const Menu = () => {
       .then(data => {
         // Actualizar la consola 2 con los resultados obtenidos
         setConsole2(data.message);
-        console.log(data)
       })
       .catch(error => {
         console.error('Error:', error);
       });
+  
     console.log(JSON.stringify({
       command: replacedConsole1
-    }) )
+    }));
   };
+  
   
 
 

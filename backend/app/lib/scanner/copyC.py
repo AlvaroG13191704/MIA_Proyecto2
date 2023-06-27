@@ -20,13 +20,13 @@ def scan_command_line_copy(command_line):
   from_path = None
   try:
     if match_from and match_from.group() is not None:
-      from_path = match_from.group().split("->")[1].replace("'", '').replace(' -to','')
+      from_path = match_from.group().split("->")[1].replace("'", '').replace(' -to','').replace('-type','').replace(' -Type','')
   except AttributeError:
     from_path = None
   to_path = None
   try:
     if match_to and match_to.group() is not None:
-      to_path = match_to.group().split("->")[1].replace("'", '')
+      to_path = match_to.group().split("->")[1].replace("'", '').replace('-type','').replace(' -Type','')
   except AttributeError:
     to_path = None
   type_to = match_type_to.group(1) or match_type_to.group(2) if match_type_to else None
