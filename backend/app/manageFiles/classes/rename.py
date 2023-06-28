@@ -14,6 +14,10 @@ class Rename():
 
   
   def local(self):
+    # return {
+    #   "status": "error",
+    #   "message": f"El archivo '{self.path}' -- '{self.name}' -- '{self.type}' ",
+    # }
     path = self.path.replace("'","").lstrip('/').rstrip('/')
     # Get the absolute path of the project directory
     root_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
@@ -27,13 +31,13 @@ class Rename():
         if os.path.exists(new_path):
           return {
             "status": "error",
-            "message": f"El archivo {self.name} ya existe"
+            "message": f"El archivo {self.name} ya existe en el server"
           }
         else:
           os.rename(file_, new_path)
           return {
             "status": "success",
-            "message": f"Archivo {self.name} renombrado exitosamente"
+            "message": f"Archivo {self.name} renombrado exitosamente en el server"
           }
       elif os.path.isdir(file_):
         parent_dir = os.path.dirname(file_)
@@ -43,17 +47,17 @@ class Rename():
           shutil.move(file_, new_path)
           return {
             "status": "success",
-            "message": f"Archivo {self.name} renombrado exitosamente"
+            "message": f"Archivo {self.name} renombrado exitosamente en el server"
           }
         else:
           return {
             "status": "error",
-            "message": f"El archivo {self.name} ya existe"
+            "message": f"El archivo {self.name} ya existe en el server"
           }
     else:
       return {
         "status": "error",
-        "message": f"El archivo {self.name} no existe"
+        "message": f"El archivo {self.name} no existe en el server"
       }
 
   def bucket(self):
@@ -101,7 +105,7 @@ class Rename():
         )
         return {
         "status": "success",
-        "message": f"Carpeta {self.name} renombrado exitosamente  "
+        "message": f"Carpeta {self.name} renombrado exitosamente en el bucket"
         }
       else:
         return {
@@ -117,7 +121,7 @@ class Rename():
       if "Contents" in object_list_destini:
         return {
           "status": "error",
-          "message": f"El archivo {self.name} ya existe"
+          "message": f"El archivo {self.name} ya existe en el bucket"
         }
       else:
         # evaluate if the origin path is a file or a folder
@@ -137,7 +141,7 @@ class Rename():
           )
           return {
           "status": "success",
-          "message": f"Archivo {self.name} renombrado exitosamente "
+          "message": f"Archivo {self.name} renombrado exitosamente en el bucket"
           }
     else:
       return {

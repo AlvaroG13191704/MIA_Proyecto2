@@ -21,7 +21,7 @@ class Delete_all():
       shutil.rmtree(path)
       return {
         "status": "success",
-        "message": f"Archivos eliminados exitosamente"
+        "message": f"Archivos eliminados exitosamente en el servidor"
       }
     else:
       return {
@@ -38,7 +38,7 @@ class Delete_all():
       response = self.s3.delete_object(Bucket=bucket_name, Key=object_key)
       return {
         "status": "success",
-        "message": f"Archivos eliminados exitosamente"
+        "message": f"Archivos eliminados exitosamente en el bucket"
       }
     except Exception as e:
       return {

@@ -32,12 +32,12 @@ class Create():
 
       return {
         "status": "success",
-        "message": f"Archivo {name} creado exitosamente"
+        "message": f"Archivo {name} creado exitosamente en el server"
       }
     else:
       return {
         "status": "error",
-        "message": f"El archivo {name} ya existe"
+        "message": f"El archivo {name} ya existe en el server"
       }
 
   
@@ -52,17 +52,17 @@ class Create():
       if 'Contents' in list_objects:
         return {
           "status": "error",
-          "message": f"El archivo {self.name} ya existe"
+          "message": f"El archivo {self.name} ya existe en el bucket"
         }
       self.s3.put_object(Bucket=bucket_name, Key=object_key, Body=self.body)
       return {
         "status": "success",
-        "message": f"Archivo {self.name} creado exitosamente"
+        "message": f"Archivo {self.name} creado exitosamente en el bucket"
       }
     except Exception as e:
       return {
         "status": "error",
-        "message": f"Error al crear archivo {self.name} {object_key} ya existe"
+        "message": f"Error al crear archivo {self.name} {object_key} ya existe en el bucket"
       }
 
 

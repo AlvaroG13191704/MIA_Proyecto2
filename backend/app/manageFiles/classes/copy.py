@@ -34,13 +34,13 @@ class Copy():
           if os.path.isdir(destiny_path) and os.path.basename(origin_path) == os.path.basename(destiny_path):
             return {
               "status": "error",
-              "Message":f"Ya existe una carpeta con el nombre '{os.path.basename(origin_path)}' en la ubicación de destino."
+              "Message":f"Ya existe una carpeta con el nombre '{os.path.basename(origin_path)}' en la ubicación de destino del servidor."
             }
           else:
             self.copyDirectoryLocal(origin_path, destiny_path)
             return {
               "status": "success",
-              "message": f"Carpeta {os.path.basename(origin_path)} copiada exitosamente"
+              "message": f"Carpeta {os.path.basename(origin_path)} copiada exitosamente en el servidor"
             }
         elif os.path.isfile(origin_path):
           file_name = os.path.basename(origin_path)
@@ -48,18 +48,18 @@ class Copy():
           if os.path.exists(os.path.join(destiny_path,file_name)):
             return {
               "status": "error",
-              "message":f"Ya existe un archivo con el nombre '{file_name}' en la ubicación de destino."
+              "message":f"Ya existe un archivo con el nombre '{file_name}' en la ubicación de destino del servidor."
             }
           else:
             self.copyFileLocal(origin_path, os.path.join(destiny_path,file_name))
             return {
               "status": "success",
-              "message": f"Archivo {file_name} copiado exitosamente"
+              "message": f"Archivo {file_name} copiado exitosamente en el servidor"
             }
       else:
         return {
           "status": "error",
-          "message": f"El archivo o carpeta {os.path.basename(origin_path)} no existe"
+          "message": f"El archivo o carpeta {os.path.basename(origin_path)} no existe en el servidor"
         }
 
     # evaluate if the type_to is bucket
@@ -81,13 +81,13 @@ class Copy():
               if file in [obj["Key"].split("/")[-1] for obj in object_list["Contents"]]:
                 return {
                   "status": "error",
-                  "message":f"Ya existe un archivo con el nombre '{file}' en la ubicación de destino."
+                  "message":f"Ya existe un archivo con el nombre '{file}' en la ubicación de destino del bucket."
                 }
               # if the directory not exist in the bucket, upload it
               if file in [obj["Key"].split("/")[-2] for obj in object_list["Contents"]]:
                 return {
                   "status": "error",
-                  "message":f"Ya existe una carpeta con el nombre '{file}' en la ubicación de destino."
+                  "message":f"Ya existe una carpeta con el nombre '{file}' en la ubicación de destino del bucket."
                 }
               # if file is a directory iterate the files inside
               if os.path.isdir(os.path.join(origin_path,file)):
@@ -98,7 +98,7 @@ class Copy():
                 self.copyFileBucket(file, destiny_path_bucket, open(os.path.join(origin_path,file), 'rb'), name_bucket)
             return {
               "status": "success",
-              "message": f"Carpeta {os.path.basename(origin_path)} copiada exitosamente"
+              "message": f"Carpeta {os.path.basename(origin_path)} copiada exitosamente en el bucket"
             }
           else:
             return {
@@ -114,13 +114,13 @@ class Copy():
             if os.path.basename(origin_path) in [obj["Key"].split("/")[-1] for obj in object_list["Contents"]]:
               return {
                 "status": "error",
-                "message":f"Ya existe un archivo con el nombre '{os.path.basename(origin_path)}' en la ubicación de destino."
+                "message":f"Ya existe un archivo con el nombre '{os.path.basename(origin_path)}' en la ubicación de destino del bucket."
               }
             else:
               self.copyFileBucket(os.path.basename(origin_path), destiny_path_bucket, open(origin_path, 'rb'), name_bucket)
               return {
                 "status": "success",
-                "message": f"Archivo {os.path.basename(origin_path)} copiado exitosamente"
+                "message": f"Archivo {os.path.basename(origin_path)} copiado exitosamente en el bucket"
               }
           else:
             return {
@@ -130,7 +130,7 @@ class Copy():
       else:
         return {
           "status": "error",
-          "message": f"El archivo o carpeta {os.path.basename(origin_path)} no existe"
+          "message": f"El archivo o carpeta {os.path.basename(origin_path)} no existe en el bucket"
         }
       
   def bucket(self):
@@ -164,7 +164,7 @@ class Copy():
             if len([obj["Key"].split("/")[-1] for obj in object_list_destiny["Contents"]]) > 1:
               return {
                 "status": "error",
-                "message":f"Ya existe un archivo en la ubicación de destino {destiny_path_bucket}."
+                "message":f"Ya existe un archivo en la ubicación de destino del bucket {destiny_path_bucket}."
               }
             else:
               # copy the files from the origin path to the destiny path
@@ -172,7 +172,7 @@ class Copy():
                 self.copyDirectoryCloud(file["Key"], destiny_path_bucket)
               return {
                 "status": "success",
-                "message": f"Carpeta {origin_path_bucket} copiada exitosamente"
+                "message": f"Carpeta {origin_path_bucket} copiada exitosamente en el bucket"
               }
           else:
             print("es archivo")
@@ -188,7 +188,7 @@ class Copy():
                 self.copyDirectoryCloud(file["Key"], destiny_path_bucket)
               return {
                 "status": "success",
-                "message": f"Archivo {origin_path_bucket} copiado exitosamente"
+                "message": f"Archivo {origin_path_bucket} copiado exitosamente en el bucket"
               }
         else:
           return {
@@ -226,7 +226,7 @@ class Copy():
               self.copyDirectoryCloudToLocal(file["Key"], destiny_path)
             return {
             "status": "success",
-            "message": f"Carpeta {origin_path_bucket} copiada exitosamente"
+            "message": f"Carpeta {origin_path_bucket} copiada exitosamente en el server"
             }
           # file
           else:
@@ -243,7 +243,7 @@ class Copy():
                 self.copyDirectoryCloudToLocal(file["Key"], destiny_path)
               return {
                 "status": "success",
-                "message": f"Archivo {origin_path_bucket} copiado exitosamente"
+                "message": f"Archivo {origin_path_bucket} copiado exitosamente en el server"
               }
         else:
           return {

@@ -29,19 +29,19 @@ class Delete():
         os.remove(file_)
         return {
           "status": "success",
-          "message": f"Archivo {name} eliminado exitosamente"
+          "message": f"Archivo {name} eliminado exitosamente en el server"
         }
       elif os.path.isdir(file_):
         print("CARPETA?", file_)
         shutil.rmtree(file_)
         return {
           "status": "success",
-          "message": f"Carpeta {name} eliminada exitosamente"
+          "message": f"Carpeta {name} eliminada exitosamente en el server"
         }
     else:
       return {
         "status": "error",
-        "message": f"El archivo o carpeta {name} no existe"
+        "message": f"El archivo o carpeta {name} no existe en el server"
       }
 
   def bucket(self):
@@ -56,12 +56,12 @@ class Delete():
         self.s3.delete_objects(Bucket=bucket_name, Delete={"Objects": [{"Key": k} for k in key]})
         return {
           "status": "success",
-          "message": f"Archivos de {object_key} eliminados exitosamente"
+          "message": f"Archivos de {object_key} eliminados exitosamente en el bucket"
         }
       else:
         return {
           "status": "error",
-          "message": f"La carpeta {object_key} no existe"
+          "message": f"La carpeta {object_key} no existe en el bucket"
         }
     else:
       object_key = 'Archivos' + self.path + name
@@ -70,7 +70,7 @@ class Delete():
       if not "Contents" in objects:
         return {
           "status": "error",
-          "message": f"El archivo {name} no existe"
+          "message": f"El archivo {name} no existe en el bucket"
         }
 
       try:
@@ -78,10 +78,10 @@ class Delete():
 
         return {
           "status": "success",
-          "message": f"Archivo {name} eliminado exitosamente"
+          "message": f"Archivo {name} eliminado exitosamente en el bucket"
         }
       except Exception as e:
         return {
           "status": "error",
-          "message": f"Error al eliminar archivo {name}"
+          "message": f"Error al eliminar archivo {name} en el bucket: {e}"
         }

@@ -38,7 +38,7 @@ class Open():
     else:
       return {
         "status": "error",
-        "message": f"El archivo {self.name} no existe"
+        "message": f"El archivo {self.name} no existe en el server"
       }
     
   def bucket(self):
@@ -57,12 +57,12 @@ class Open():
         }
       return {
         "status": "error",
-        "message": f"El archivo {self.name} no existe"
+        "message": f"El archivo {self.name} no existe en el bucket"
       }
     except:
       return {
         "status": "error",
-        "message": f"El archivo {self.name} no existe"
+        "message": f"El archivo {self.name} no existe en el bucket"
       }
 
   def api_ip(self):
@@ -77,7 +77,7 @@ class Open():
       if response.json()["content"] == None or response.json()["content"] == "null":
         return {
           "status": "error",
-          "message": f"El archivo {self.name} no existe"
+          "message": f"El archivo {self.name} no existe en el servidor con la ip: {self.ip}" 
         }
       return {
       "status": "success",

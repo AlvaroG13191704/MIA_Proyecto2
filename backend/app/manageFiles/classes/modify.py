@@ -24,17 +24,17 @@ class Modify():
           f.write(self.body)
         return {
           "status": "success",
-          "message": f"Archivo {self.path} modificado exitosamente"
+          "message": f"Archivo {self.path} modificado exitosamente en el server"
         }
       else:
         return {
           "status": "error",
-          "message": f"El archivo {self.path} no existe"
+          "message": f"El archivo {self.path} no existe en el server"
         }
     else:
       return {
         "status": "error",
-        "message": f"El archivo {self.path} no existe"
+        "message": f"El archivo {self.path} no existe en el server"
       }
 
   def bucket(self):
@@ -50,15 +50,15 @@ class Modify():
         self.s3.put_object(Bucket=name_bucket, Key=origin_path_bucket, Body=self.body)
         return {
           "status": "success",
-          "message": f"Archivo {self.path} modificado exitosamente"
+          "message": f"Archivo {self.path} modificado exitosamente en el bucket"
         }
       else:
         return {
           "status": "error",
-          "message": f"El archivo {self.path} no existe"
+          "message": f"El archivo {self.path} no existe en el bucket" 
         }
     except:
       return {
         "status": "error",
-        "message": f"El archivo {self.path} no existe"
+        "message": f"El archivo {self.path} no existe en el bucket"
       }
