@@ -28,7 +28,7 @@ def scan_command_line_open(command_line):
     if match_port and match_port.group() is not None:
       port = match_port.group().split("->")[1].replace("'", '')
     if match_name and match_name.group() is not None:
-      name = match_name.group().split("->")[1].replace("'", '')
+      name = match_name.group().split("->")[1].replace("'", '').replace("-port", "")
   except AttributeError:
     ip = False
     port = False
@@ -38,4 +38,4 @@ def scan_command_line_open(command_line):
   # Return the extracted values
   if name.endswith(" "):
     return recovery.lower().rstrip(" "), type, ip, port, name.rstrip(" ")
-  return recovery.lower().rstrip(" "), type, ip, port, name
+  return recovery.lower().strip(), type, ip.strip(), port.strip(), name

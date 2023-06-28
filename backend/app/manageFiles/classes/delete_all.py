@@ -33,15 +33,16 @@ class Delete_all():
   def bucket(self):
     bucket_name = "mia-proyecto2"
     object_key = "Archivos/"
-    try:
-      # delete all files and directories in bucket
-      response = self.s3.delete_object(Bucket=bucket_name, Key=object_key)
+    objects = self.s3.list_objects(Bucket=bucket_name, Prefix=object_key)
+    if "Contents" in objects:
+      key = [obj["Key"] for obj in objects["Contents"]]
+      self.s3.delete_objects(Bucket=bucket_name, Delete={"Objects": [{"Key": k} for k in key]})
       return {
         "status": "success",
-        "message": f"Archivos eliminados exitosamente en el bucket"
+        "message": f"Carpeta {object_key} eliminada exitosamente del bucket"
       }
-    except Exception as e:
+    else:
       return {
         "status": "error",
-        "message": f"Error al eliminar los archivos en el bucket: {e}"
+        "message": f"La carpeta {object_key} no existe en el bucket"
       }

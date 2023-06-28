@@ -70,11 +70,13 @@ class Open():
       "name": self.name,
       "type": self.type,
     }
+    print(payload)
     headers = {'Content-Type': 'application/json'}
     response = requests.post(f'http://{self.ip}:{self.port}/open', data=json.dumps(payload), headers=headers)
     if response.status_code == 200:
       # if content is null, return error
       if response.json()["content"] == None or response.json()["content"] == "null":
+        print(response.json(), " resultado")
         return {
           "status": "error",
           "message": f"El archivo {self.name} no existe en el servidor con la ip: {self.ip}" 

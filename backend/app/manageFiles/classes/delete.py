@@ -56,7 +56,7 @@ class Delete():
         self.s3.delete_objects(Bucket=bucket_name, Delete={"Objects": [{"Key": k} for k in key]})
         return {
           "status": "success",
-          "message": f"Archivos de {object_key} eliminados exitosamente en el bucket"
+          "message": f"Carpeta {object_key} eliminada exitosamente del bucket"
         }
       else:
         return {
