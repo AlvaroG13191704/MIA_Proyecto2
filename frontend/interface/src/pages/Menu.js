@@ -29,7 +29,7 @@ const Menu = () => {
     const replacedConsole1 = console1.replace(/"/g, "'");
     // 
     // http://0.0.0.0:8000/command/console-command
-    fetch('http://18.221.14.38:8000/command/console-command', {
+    fetch('http://0.0.0.0:8000/command/console-command', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

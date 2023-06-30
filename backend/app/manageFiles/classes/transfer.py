@@ -55,7 +55,7 @@ class Transfer():
 
     # evaluate if the type_to is bucket, move from local to bucket
     else:
-      origin_path_bucket = "Archivos" + self.from_
+      origin_path_buckte = "Archivos" + self.from_
       destiny_path_bucket = "Archivos" + self.to_
       name_bucket = "mia-proyecto2"
 
